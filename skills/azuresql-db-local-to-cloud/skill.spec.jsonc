@@ -117,7 +117,7 @@
       "that the cloud target needs a second driver, a separate query set, or a branch on an environment variable in the data layer",
       "that switching to Microsoft Entra ID requires a different data access code path rather than different connection string fields",
       "that a green local test run is by itself evidence the application is ready for the service, when something the service refuses can still succeed locally",
-      "that Microsoft Entra ID authentication can be rehearsed end to end against the container, when CREATE USER FROM EXTERNAL PROVIDER on a container with no Microsoft Entra configuration fails with Msg 37525",
+      "that Microsoft Entra ID authentication can be rehearsed end to end against the container, when CREATE USER FROM EXTERNAL PROVIDER on a container with no Microsoft Entra configuration fails with Msg 33134",
       "that the local container gives you the managed service features around the engine, such as automated backup or point in time restore"
     ]
   },

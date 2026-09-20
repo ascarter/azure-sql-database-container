@@ -217,7 +217,7 @@ least interesting reason available: it has never heard of the thing.
 
 **The argument does not cover a whole skill,** which is why each block carries both `covers` and
 `does_not_cover`. It reaches the corrections no training data contains, such as `Msg 40508`,
-`Msg 12844`, `Msg 12713`, `Msg 40510`, the absent `/docker-entrypoint-initdb.d`, the engine never
+`Msg 12824`, `Msg 12713`, `Msg 40510`, the absent `/docker-entrypoint-initdb.d`, the engine never
 creating a database on connect, and the vector surface. It reaches none of the generic material
 wrapped around them, such as retry with backoff, Compose YAML, workflow service containers or ORM
 scaffolding, and whether these skills improve an answer there is unmeasured.
