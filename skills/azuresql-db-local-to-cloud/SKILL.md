@@ -56,7 +56,7 @@ separate grammar and use `Uid=` / `Pwd=` as their own keywords.
 Local (container, SA auth):
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 Cloud (Azure SQL Database, Microsoft Entra auth):
@@ -151,7 +151,7 @@ echo "ready on localhost,$HOST_PORT"
 Then point the app at it, using the `HOST_PORT` the loop settled on:
 
 ```bash
-export SQL_CONNECTION_STRING="Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+export SQL_CONNECTION_STRING="Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 ```
 
 To run against the cloud later, change only this variable; do not touch the app.

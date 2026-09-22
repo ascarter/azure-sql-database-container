@@ -16,7 +16,7 @@ services:
   app:
     build: ./app
     environment:
-      SQL_CONNECTION_STRING: "Server=db,1433;Database=master;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+      SQL_CONNECTION_STRING: "Server=db,1433;Database=master;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
     depends_on:
       - db
 ```
@@ -63,7 +63,7 @@ services:
   app:
     build: ./app
     environment:
-      SQL_CONNECTION_STRING: "Server=db,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+      SQL_CONNECTION_STRING: "Server=db,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
     depends_on:
       provision:
         condition: service_completed_successfully

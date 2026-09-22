@@ -99,7 +99,7 @@ Schema + data (`.bacpac`):
 ```bash
 SqlPackage /Action:Import \
   /SourceFile:"./mydatabase.bacpac" \
-  /TargetConnectionString:"Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+  /TargetConnectionString:"Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true"
 ```
 
 Schema only (`.dacpac`) uses `/Action:Publish`, not Import:
@@ -107,7 +107,7 @@ Schema only (`.dacpac`) uses `/Action:Publish`, not Import:
 ```bash
 SqlPackage /Action:Publish \
   /SourceFile:"./myschema.dacpac" \
-  /TargetConnectionString:"Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+  /TargetConnectionString:"Server=localhost,$HOST_PORT;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true"
 ```
 
 If SqlPackage is not installed locally, see [references/sqlpackage-import.md](references/sqlpackage-import.md) for

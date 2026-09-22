@@ -49,10 +49,12 @@ ollama pull nomic-embed-text   # 768-dimensional embeddings, runs locally
 
 ### 3. Configure the connection string
 
-Create `.env` with a single connection string (swap only this value for the cloud later):
+Create `.env` with a single connection string, reusing the `$MSSQL_SA_PASSWORD` generated in step 1 (swap only this value for the cloud later):
 
-```dotenv
-SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;Uid=sa;Pwd=YourStr0ng_Passw0rd;TrustServerCertificate=yes;"
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;Uid=sa;Pwd=${MSSQL_SA_PASSWORD};TrustServerCertificate=yes;"
+EOF
 ```
 
 ### 4. Create the RAG script

@@ -55,6 +55,7 @@ runs under emulation.
 Podman uses the same arguments. Sign in first (see `image-and-registry.md`).
 
 ```bash
+MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
 podman run -d --name sqldb --platform linux/amd64 -e "ACCEPT_EULA=Y" \
   -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" -p "127.0.0.1:1433:1433" \
   sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest

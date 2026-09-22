@@ -58,7 +58,7 @@ Compose CLI of the authoring host, not inside the image.
   only, not application work. Always select the target database in the connection
   string (`Database=appdb`, or `-d appdb` for sqlcmd).
 - App connection string (single `SQL_CONNECTION_STRING` env var, service name host):
-  `Server=sqldb,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true`
+  `Server=sqldb,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true`
   (house style spells it `User Id=`/`Password=`/`Database=`; `Uid=`/`Pwd=` are
   valid synonyms).
 - The image does **NOT** auto-run `/docker-entrypoint-initdb.d/*.sql` (a
@@ -123,7 +123,7 @@ services:
         condition: service_completed_successfully
     environment:
       # Host is the SERVICE NAME sqldb, not localhost.
-      SQL_CONNECTION_STRING: "Server=sqldb,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+      SQL_CONNECTION_STRING: "Server=sqldb,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 ```
 
 Bring it up (after `docker login`, see above):
@@ -161,7 +161,7 @@ Use Docker Compose as the Dev Container backend so the same `sqldb` +
   "workspaceFolder": "/workspace",
   "runServices": ["sqldb", "sqldb-init"],
   "remoteEnv": {
-    "SQL_CONNECTION_STRING": "Server=sqldb,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+    "SQL_CONNECTION_STRING": "Server=sqldb,1433;Database=appdb;User Id=sa;Password=${localEnv:MSSQL_SA_PASSWORD};TrustServerCertificate=true"
   }
 }
 ```

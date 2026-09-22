@@ -25,6 +25,13 @@ docker exec sqldb /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA
   -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"
 ```
 
+Generate (or reuse) the shared SA password once, before writing any `.env` file below, so the
+compose service, the app, and every ORM read the same credential:
+
+```bash
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+```
+
 ## Shared: compose service
 
 `compose.yaml`. The provisioner sidecar creates appdb so the app never hits a missing database.
@@ -63,15 +70,17 @@ services:
 Connection string the app consumes (host side, port 1433):
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 ## .NET Aspire (EF Core)
 
 `.env` / user-secrets:
 
-```
-SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true
+EOF
 ```
 
 Provision appdb (once, on master) before the first migration: see
@@ -106,8 +115,10 @@ For the migration workflow in depth, see the **azuresql-db-schema-migration** sk
 
 `.env`:
 
-```
-SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true
+EOF
 ```
 
 Provision appdb on master before the app connects (see
@@ -157,9 +168,11 @@ Prisma needs a `sqlserver://` URL. Provide both env vars; keep them describing t
 
 `.env`:
 
-```
-SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
-DATABASE_URL=sqlserver://localhost:1433;database=appdb;user=sa;password=YourStr0ng_Passw0rd;trustServerCertificate=true;encrypt=true
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true
+DATABASE_URL=sqlserver://localhost:1433;database=appdb;user=sa;password=${MSSQL_SA_PASSWORD};trustServerCertificate=true;encrypt=true
+EOF
 ```
 
 Install Prisma (pinned to v6):
@@ -201,10 +214,12 @@ const widgets = await prisma.widget.findMany({ where: { name } });
 
 `.env` (the same vars as Next.js; the TypeORM DataSource below also reads `MSSQL_SA_PASSWORD`):
 
-```
-SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
-DATABASE_URL=sqlserver://localhost:1433;database=appdb;user=sa;password=YourStr0ng_Passw0rd;trustServerCertificate=true;encrypt=true
-MSSQL_SA_PASSWORD=<replace-with-a-unique-strong-password>
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true
+DATABASE_URL=sqlserver://localhost:1433;database=appdb;user=sa;password=${MSSQL_SA_PASSWORD};trustServerCertificate=true;encrypt=true
+MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+EOF
 ```
 
 Provision appdb on master before bootstrapping (see
@@ -223,7 +238,7 @@ export const AppDataSource = new DataSource({
   host: "localhost",
   port: 1433,
   username: "sa",
-  password: process.env.MSSQL_SA_PASSWORD ?? "YourStr0ng_Passw0rd",
+  password: process.env.MSSQL_SA_PASSWORD ?? (() => { throw new Error("MSSQL_SA_PASSWORD not set"); })(),
   database: "appdb",                 // selected here, never via USE
   options: { trustServerCertificate: true },
   entities: [/* ... */],

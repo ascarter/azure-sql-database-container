@@ -87,7 +87,7 @@ least three of upper case, lower case, digits, and symbols). The engine listens 
 Apps read **one** env var, `SQL_CONNECTION_STRING` (replace `1433` with the `HOST_PORT` Step 1 chose if 1433 was occupied):
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 House style spells the keywords `User Id=` / `Password=` / `Database=`; `Uid=` / `Pwd=` are

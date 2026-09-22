@@ -38,16 +38,18 @@ their connection. Standardize its value on the canonical string (note `appdb`
 must already exist):
 
 ```bash
-export SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 ```
 
-In compose, pass it to the app service:
+In compose, pass it to the app service (compose reads `MSSQL_SA_PASSWORD` from the shell or a
+`.env` file next to the compose file, so the app and database services stay in sync):
 
 ```yaml
 services:
   app:
     environment:
-      SQL_CONNECTION_STRING: "Server=sqldb,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+      SQL_CONNECTION_STRING: "Server=sqldb,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 ```
 
 Inside a compose network, use the service name (`sqldb`) as the host; from the

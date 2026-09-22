@@ -67,7 +67,7 @@ Standard connection string. House style spells it `User Id=`/`Password=`/`Databa
 `Uid=`/`Pwd=` are documented SqlClient synonyms and work too.
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 ## Step 1: start the container and provision appdb (fresh-container safe)
@@ -142,10 +142,10 @@ string. Passing the dimension as a bind parameter fails with
 string), never the dimension.
 
 ```python
-import json, pyodbc
+import json, os, pyodbc
 
 CONN = ("Driver={ODBC Driver 18 for SQL Server};Server=localhost,1433;"
-        "Database=appdb;Uid=sa;Pwd=YourStr0ng_Passw0rd;TrustServerCertificate=yes")
+        f"Database=appdb;Uid=sa;Pwd={os.environ['MSSQL_SA_PASSWORD']};TrustServerCertificate=yes")
 
 def add_doc(cur, content: str):
     vec = embed(content)

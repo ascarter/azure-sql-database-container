@@ -79,7 +79,7 @@ poll bare `sqlcmd` without `-l`. For full lifecycle detail, see the
 Standardize on one form and read it from a single `SQL_CONNECTION_STRING` env var:
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 - Spell the keywords `User Id=` / `Password=` / `Database=` as house style. `Uid=` / `Pwd=` are
@@ -96,7 +96,7 @@ troubleshooting per tool are in [references/migration-tools.md](references/migra
 ### EF Core (.NET)
 
 ```bash
-export SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+export SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 dotnet ef database update
 ```
 
@@ -111,7 +111,7 @@ Prisma needs the `sqlserver://` URL form in `DATABASE_URL`:
 ```bash
 npm install -D prisma@6
 npm install @prisma/client@6
-export DATABASE_URL="sqlserver://localhost:1433;database=appdb;user=sa;password=YourStr0ng_Passw0rd;trustServerCertificate=true"
+export DATABASE_URL="sqlserver://localhost:1433;database=appdb;user=sa;password=${MSSQL_SA_PASSWORD};trustServerCertificate=true"
 npx prisma migrate deploy          # apply committed migrations (CI / prod-like)
 npx prisma migrate dev --name init # author + apply a new migration (local dev)
 ```
@@ -128,7 +128,7 @@ Prisma 7 wiring.
 ### Alembic (Python)
 
 ```bash
-export SQL_CONNECTION_STRING="mssql+pyodbc://sa:YourStr0ng_Passw0rd@localhost,1433/appdb?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
+export SQL_CONNECTION_STRING="mssql+pyodbc://sa:${MSSQL_SA_PASSWORD}@localhost,1433/appdb?driver=ODBC+Driver+18+for+SQL+Server&TrustServerCertificate=yes"
 alembic upgrade head
 ```
 
@@ -137,7 +137,7 @@ alembic upgrade head
 ```bash
 sqlpackage /Action:Publish /SourceFile:./app.dacpac \
   /TargetServerName:"localhost,1433" /TargetDatabaseName:appdb \
-  /TargetUser:sa /TargetPassword:"YourStr0ng_Passw0rd" \
+  /TargetUser:sa /TargetPassword:"$MSSQL_SA_PASSWORD" \
   /TargetTrustServerCertificate:true
 ```
 

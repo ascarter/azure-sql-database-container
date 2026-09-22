@@ -55,14 +55,16 @@ Ensure `package.json` has `"type": "module"`.
 
 ### 3. Create the `.env` file
 
-Create `.env` at the project root if it does not exist. Use a single `SQL_CONNECTION_STRING` so the same code points at local or cloud by swapping only this value.
+Create `.env` at the project root if it does not exist. Use a single `SQL_CONNECTION_STRING` so the same code points at local or cloud by swapping only this value, reusing the `$MSSQL_SA_PASSWORD` generated in step 1.
 
-```dotenv
+```bash
+cat > .env <<EOF
 # Local: Azure SQL Database container
-SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 
 # Cloud (for later): Azure SQL Database. Only the server and auth change; the application does not.
 # SQL_CONNECTION_STRING="Server=tcp:<your-server>.database.windows.net,1433;Database=appdb;Authentication=Active Directory Default;Encrypt=true"
+EOF
 ```
 
 Add `.env` to `.gitignore`. The `appdb` database was created in step 1; the app connects to it directly (the engine does not create databases on connect).

@@ -118,7 +118,7 @@ session where the Azure statement filter is not enforced, so `USE` appears to wo
 only, not application work. Standardize on one `SQL_CONNECTION_STRING` env var:
 
 ```
-Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
+Server=localhost,1433;Database=appdb;User Id=sa;Password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true
 ```
 
 House style spells the keywords `User Id=` / `Password=` / `Database=`, which

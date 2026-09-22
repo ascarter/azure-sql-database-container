@@ -55,8 +55,17 @@ GO
 
 ### 3. Start it and load the seed
 
+The named volume persists the `sa` password baked into the data across restarts, so the
+password must also be persisted outside the shell — otherwise a later shell without
+`MSSQL_SA_PASSWORD` set generates a new value that no longer matches the existing volume and
+every subsequent connection fails. Store it in `.env.mssql-password` (gitignored) the first
+time, and reuse it on every later `docker compose up`:
+
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+if [ ! -f .env.mssql-password ]; then
+  echo "MSSQL_SA_PASSWORD=Aa1!$(openssl rand -hex 16)" > .env.mssql-password
+fi
+export MSSQL_SA_PASSWORD="$(grep -oP '(?<=^MSSQL_SA_PASSWORD=).*' .env.mssql-password)"
 docker compose up -d
 
 # Wait until the engine is ready and create appdb (it is not auto-created). The -b makes a SQL
@@ -75,8 +84,10 @@ The seed runs once; the named volume keeps `appdb` and its data across restarts,
 
 Set the app connection string (in `.env`, read from the environment, never hardcoded):
 
-```dotenv
-SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true"
+```bash
+cat > .env <<EOF
+SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
+EOF
 ```
 
 Verify offline operation by disabling the network and confirming the app still reads and writes data.
@@ -93,4 +104,4 @@ Verify offline operation by disabling the network and confirming the app still r
 ## Do not
 
 - Do not depend on any network call at runtime, including cloud auth or remote seed sources.
-- Do not commit the SA password; keep it in `.env` (gitignored) or a compose `.env` file.
+- Do not commit the SA password; keep it in `.env` and `.env.mssql-password` (both gitignored).
