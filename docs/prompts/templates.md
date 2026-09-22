@@ -31,10 +31,10 @@ services:
     # x64-only image; platform: linux/amd64 lets it run on a non-x64 host, no-op on x64.
     platform: linux/amd64
     environment:
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - "127.0.0.1:1433:1433"
     volumes:
       - sqldb-data:/var/opt/mssql
 volumes:
@@ -56,8 +56,9 @@ DATABASE_URL="sqlserver://localhost:1433;database=appdb;user=sa;password=YourStr
 On Prisma 7+, the runtime client also needs a driver adapter: `npm i @prisma/adapter-mssql` and construct `PrismaClient` with the matching `PrismaMSSQL` adapter. `prisma migrate dev` creates the `appdb` database if it does not exist. Most other stacks (EF Core, FastAPI with SQLAlchemy/Alembic, raw `mssql-python`) do **not** create the database, so provision it first: the engine does not auto-create databases. `appdb` is an example name; use your own if you prefer. Wait for the engine, then create it with the ready-wait loop (`-b` makes a SQL error set the exit code so a transient startup error is retried, not masked):
 
 ```bash
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
 until docker compose exec -T sqldb /opt/mssql-tools18/bin/sqlcmd \
-    -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b -l 2 \
+    -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -l 2 \
     -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;" >/dev/null 2>&1; do
   sleep 2
 done

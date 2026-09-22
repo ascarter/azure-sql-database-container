@@ -34,10 +34,10 @@ services:
     # x64-only image; platform: linux/amd64 lets it run on a non-x64 host, no-op on x64.
     platform: linux/amd64
     environment:
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - "127.0.0.1:1433:1433"
     volumes:
       - sqldb-data:/var/opt/mssql
     healthcheck:
@@ -60,7 +60,7 @@ services:
     # -b makes a SQL error set a non-zero exit, so a failed CREATE DATABASE fails the one-shot
     # instead of reporting service_completed_successfully without provisioning appdb.
     entrypoint: ["/opt/mssql-tools18/bin/sqlcmd", "-S", "sqldb,1433", "-U", "sa",
-      "-P", "YourStr0ng_Passw0rd", "-C", "-b", "-l", "2", "-Q", "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"]
+      "-P", "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}", "-C", "-b", "-l", "2", "-Q", "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"]
 
 volumes:
   sqldb-data:

@@ -11,15 +11,15 @@ What the container requires at start, and the app-side convention.
 
 `MSSQL_SA_PASSWORD` policy: at least 8 characters and at least three of upper
 case, lower case, digits, and symbols. A weak password makes the engine fail to
-initialize (see `troubleshooting.md`). Example used throughout these docs:
-`YourStr0ng_Passw0rd`.
+initialize (see `troubleshooting.md`). Generate a unique value for each local
+environment or supply one through your secret-management workflow.
 
 The engine listens on container port `1433`. Map it to a host port at run time
-(`-p HOST_PORT:1433`); see `run-the-container.md`.
+(`-p 127.0.0.1:HOST_PORT:1433`); see `run-the-container.md`.
 
 ```bash
-docker run -d --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourStr0ng_Passw0rd" \
-  -p "1433:1433" sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
+docker run -d --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}" \
+  -p "127.0.0.1:1433:1433" sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
 ```
 
 ## Optional: Microsoft Entra ID (`MSSQL_AAD_*`)

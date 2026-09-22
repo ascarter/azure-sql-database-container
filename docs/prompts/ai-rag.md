@@ -21,8 +21,9 @@ Read the entire instruction set before executing.
 docker login sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io
 # The image is x64-only; on a non-x64 host this adds --platform linux/amd64 to run it under emulation.
 PLATFORM=(); case "$(docker info -f '{{.Architecture}}' 2>/dev/null)" in x86_64|amd64) ;; *) PLATFORM=(--platform linux/amd64);; esac
-docker run --name sqldb "${PLATFORM[@]}" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourStr0ng_Passw0rd" \
-    -p 1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
+MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+docker run --name sqldb "${PLATFORM[@]}" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}" \
+    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
 ```
 
 Wait for the engine, then create the `appdb` database. Azure SQL Database does **not** create databases automatically on connect, so `appdb` must exist before `rag.py` connects:
@@ -31,7 +32,7 @@ Wait for the engine, then create the `appdb` database. Azure SQL Database does *
 # Create appdb, retrying until it succeeds (waits out engine startup; -b makes sqlcmd return a
 # non-zero exit on a SQL error so the loop retries while the engine is still initializing).
 until docker exec sqldb /opt/mssql-tools18/bin/sqlcmd \
-    -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b -l 2 \
+    -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -l 2 \
     -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;" >/dev/null 2>&1; do
   sleep 2
 done

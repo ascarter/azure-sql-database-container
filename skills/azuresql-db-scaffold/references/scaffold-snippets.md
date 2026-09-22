@@ -21,7 +21,7 @@ also read `DATABASE_URL`. Image is
 The engine does not auto-create databases. On a master connection:
 
 ```bash
-docker exec sqldb /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b \
+docker exec sqldb /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b \
   -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"
 ```
 
@@ -37,9 +37,9 @@ services:
     # platform: linux/amd64
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
     ports:
-      - "1433:1433"
+      - "127.0.0.1:1433:1433"
     healthcheck:
       test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -b -l 2 -Q \"SELECT 1\""]
       interval: 5s
@@ -51,10 +51,13 @@ services:
     depends_on:
       sqldb:
         condition: service_healthy
+    environment:
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
     entrypoint: ["/bin/bash", "-c"]
-    command: >
-      "/opt/mssql-tools18/bin/sqlcmd -S sqldb -U sa -P 'YourStr0ng_Passw0rd' -C -b
-       -Q \"IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;\""
+    command:
+      - >
+        /opt/mssql-tools18/bin/sqlcmd -S sqldb -U sa -P "$$MSSQL_SA_PASSWORD" -C -b
+        -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"
 ```
 
 Connection string the app consumes (host side, port 1433):
@@ -183,7 +186,7 @@ datasource db {
 Provision appdb on master, THEN run the first migration (Prisma will not create the database):
 
 ```bash
-docker exec sqldb /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b \
+docker exec sqldb /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b \
   -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;"
 npx prisma migrate dev --name init
 ```
@@ -201,7 +204,7 @@ const widgets = await prisma.widget.findMany({ where: { name } });
 ```
 SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=YourStr0ng_Passw0rd;TrustServerCertificate=true
 DATABASE_URL=sqlserver://localhost:1433;database=appdb;user=sa;password=YourStr0ng_Passw0rd;trustServerCertificate=true;encrypt=true
-MSSQL_SA_PASSWORD=YourStr0ng_Passw0rd
+MSSQL_SA_PASSWORD=<replace-with-a-unique-strong-password>
 ```
 
 Provision appdb on master before bootstrapping (see

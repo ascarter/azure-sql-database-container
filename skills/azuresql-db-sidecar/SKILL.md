@@ -82,9 +82,9 @@ services:
     platform: linux/amd64        # x64-only image; required on a non-x64 host
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
     ports:
-      - "1433:1433"              # optional; only to reach it from the host
+      - "127.0.0.1:1433:1433"              # optional; only to reach it from the host
     healthcheck:
       # -b: a SQL error sets the exit code, so transient startup errors
       # (e.g. Msg 913) are retried, not masked. -l 2: short login timeout.
@@ -103,7 +103,7 @@ services:
       sqldb:
         condition: service_healthy
     environment:
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
     # If you have seed.sql, mount it and add: -i /seed/seed.sql on a -d appdb call.
     # volumes:
     #   - ./seed.sql:/seed/seed.sql:ro

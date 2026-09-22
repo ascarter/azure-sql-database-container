@@ -25,10 +25,10 @@ services:
     platform: linux/amd64
     container_name: sqldb
     environment:
-      MSSQL_SA_PASSWORD: "YourStr0ng_Passw0rd"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - "127.0.0.1:1433:1433"
     volumes:
       - sqldb-data:/var/opt/mssql
       - ./db/seed.sql:/seed.sql:ro
@@ -56,18 +56,19 @@ GO
 ### 3. Start it and load the seed
 
 ```bash
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
 docker compose up -d
 
 # Wait until the engine is ready and create appdb (it is not auto-created). The -b makes a SQL
 # error set the exit code, so transient startup errors are retried, not masked.
 until docker compose exec -T sqldb /opt/mssql-tools18/bin/sqlcmd \
-    -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b -l 2 \
+    -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -l 2 \
     -Q "IF DB_ID('appdb') IS NULL CREATE DATABASE appdb;" >/dev/null 2>&1; do
   sleep 2
 done
 # Apply the schema and data to appdb. Select the database with -d; do not USE.
 docker compose exec -T sqldb /opt/mssql-tools18/bin/sqlcmd \
-    -S localhost -U sa -P "YourStr0ng_Passw0rd" -C -b -d appdb -i /seed.sql
+    -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -C -b -d appdb -i /seed.sql
 ```
 
 The seed runs once; the named volume keeps `appdb` and its data across restarts, so later `docker compose up -d` runs need no network and no re-seed.
