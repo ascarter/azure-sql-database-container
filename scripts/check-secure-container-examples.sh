@@ -28,7 +28,7 @@ known_passwords=""
 if [[ -n "$password_generating_files" ]]; then
   known_passwords="$(
     grep -nE \
-      -- '(MSSQL_SA_PASSWORD[:=]|[-]P[[:space:]]+|[Pp]wd[:=]|[Pp]assword[:=]|TargetPassword[:=]|:)[^[:cntrl:]]*YourStr0ng_Passw0rd' \
+      -- '(MSSQL_SA_PASSWORD[:=]|[-]P[[:space:]]+|[Pp]wd[:=]|[Pp]assword[:=]|TargetPassword[:=])[^[:cntrl:]]*YourStr0ng_Passw0rd' \
       $password_generating_files || true
   )"
 fi
