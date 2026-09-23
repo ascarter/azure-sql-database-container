@@ -29,7 +29,7 @@ Generate (or reuse) the shared SA password once, before writing any `.env` file 
 compose service, the app, and every ORM read the same credential:
 
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 ```
 
 ## Shared: compose service

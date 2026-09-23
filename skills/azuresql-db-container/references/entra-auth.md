@@ -54,7 +54,7 @@ container starts. You then do not need a post-init `CREATE LOGIN` or
 Replace the placeholders and the host path to your `.pfx`:
 
 ```bash
-MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 docker run -d --name sqldb \
   -e "ACCEPT_EULA=Y" \
   -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}" \

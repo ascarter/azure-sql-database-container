@@ -207,28 +207,28 @@ title: Azure SQL Database container
               <button class="runtime-tab" type="button" data-runtime="wslc">WSL container</button>
             </div>
             <div class="qstep-cmd" data-runtime-panel="docker">
-              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1!$(openssl rand -hex 16)"
+              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1%$(openssl rand -hex 16)"
 <span class="cmd-p">$</span> docker run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest</code>
-              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1!$(openssl rand -hex 16)&quot;&#10;docker run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
+              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1%$(openssl rand -hex 16)&quot;&#10;docker run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
             </div>
             <div class="qstep-cmd" data-runtime-panel="podman" hidden>
-              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1!$(openssl rand -hex 16)"
+              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1%$(openssl rand -hex 16)"
 <span class="cmd-p">$</span> podman run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest</code>
-              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1!$(openssl rand -hex 16)&quot;&#10;podman run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
+              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1%$(openssl rand -hex 16)&quot;&#10;podman run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
             </div>
             <div class="qstep-cmd" data-runtime-panel="containerd" hidden>
-              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1!$(openssl rand -hex 16)"
+              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1%$(openssl rand -hex 16)"
 <span class="cmd-p">$</span> nerdctl run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest</code>
-              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1!$(openssl rand -hex 16)&quot;&#10;nerdctl run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
+              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1%$(openssl rand -hex 16)&quot;&#10;nerdctl run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
             </div>
             <div class="qstep-cmd" data-runtime-panel="wslc" hidden>
-              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1!$(openssl rand -hex 16)"
+              <code><span class="cmd-p">$</span> MSSQL_SA_PASSWORD="Aa1%$(openssl rand -hex 16)"
 <span class="cmd-p">$</span> wslc run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest</code>
-              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1!$(openssl rand -hex 16)&quot;&#10;wslc run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
+              <button class="copy-btn" type="button" data-copy-text="MSSQL_SA_PASSWORD=&quot;Aa1%$(openssl rand -hex 16)&quot;&#10;wslc run --name sqldb -e &quot;ACCEPT_EULA=Y&quot; -e &quot;MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD&quot; \&#10;    -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest"><span class="copy-label">Copy</span></button>
             </div>
           </div>
         </div>

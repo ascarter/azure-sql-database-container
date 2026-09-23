@@ -63,9 +63,9 @@ time, and reuse it on every later `docker compose up`:
 
 ```bash
 if [ ! -f .env.mssql-password ]; then
-  echo "MSSQL_SA_PASSWORD=Aa1!$(openssl rand -hex 16)" > .env.mssql-password
+  echo "MSSQL_SA_PASSWORD=Aa1%$(openssl rand -hex 16)" > .env.mssql-password
 fi
-export MSSQL_SA_PASSWORD="$(grep -oP '(?<=^MSSQL_SA_PASSWORD=).*' .env.mssql-password)"
+export MSSQL_SA_PASSWORD="$(sed -n 's/^MSSQL_SA_PASSWORD=//p' .env.mssql-password)"
 docker compose up -d
 
 # Wait until the engine is ready and create appdb (it is not auto-created). The -b makes a SQL

@@ -38,7 +38,7 @@ their connection. Standardize its value on the canonical string (note `appdb`
 must already exist):
 
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 export SQL_CONNECTION_STRING="Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true"
 ```
 

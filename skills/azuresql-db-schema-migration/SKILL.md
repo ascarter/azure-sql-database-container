@@ -59,7 +59,7 @@ docker login sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io   # pull-only creds by sig
 
 # Pick a free host port and add the platform flag only on a non-x64 host (works in bash and zsh).
 HOST_PORT=1433; while lsof -nP -iTCP:"$HOST_PORT" -sTCP:LISTEN >/dev/null 2>&1; do HOST_PORT=$((HOST_PORT+1)); done
-MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 PLATFORM=(); case "$(docker info -f '{{.Architecture}}' 2>/dev/null)" in x86_64|amd64) ;; *) PLATFORM=(--platform linux/amd64);; esac
 docker rm -f sqldb 2>/dev/null
 docker run -d --name sqldb "${PLATFORM[@]}" -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" \

@@ -44,7 +44,7 @@ volumes:
 Add a `.env` (gitignored) with a single connection string the app reads from the environment. Generate `MSSQL_SA_PASSWORD` first so both the compose file and the connection string use the same value:
 
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 cat > .env <<EOF
 MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
 SQL_CONNECTION_STRING=Server=localhost,1433;Database=appdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true

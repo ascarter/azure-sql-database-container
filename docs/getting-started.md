@@ -100,7 +100,7 @@ Generate a unique password for this shell, then start the container on port
 `1433`:
 
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 docker run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
 ```
@@ -108,7 +108,7 @@ docker run --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASS
 On a non-x64 host, copy this version instead. It adds `--platform linux/amd64` so the x64 image runs under emulation:
 
 ```bash
-export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1!$(openssl rand -hex 16)}"
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
 docker run --platform linux/amd64 --name sqldb -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD}" \
     -p 127.0.0.1:1433:1433 -d sqldbpreview-dpgaeqhmgphzd4bk.azurecr.io/azure-sql/db-dev:latest
 ```
@@ -117,7 +117,11 @@ Confirm it is up with `docker ps --filter "name=sqldb"`; you should see `sqldb` 
 
 > **NOTE:** Keep `MSSQL_SA_PASSWORD` in the environment rather than source control. The generated value meets the default SQL password complexity policy. Set your own value before running the command if preferred.
 
-Prefer `docker compose`? Create a `docker-compose.yml`, then run `docker compose up -d`. On a non-x64 host, add `platform: linux/amd64` under the `sqldb` service.
+Prefer `docker compose`? Set the password the same way as above, then create a `docker-compose.yml` and run `docker compose up -d`. On a non-x64 host, add `platform: linux/amd64` under the `sqldb` service.
+
+```bash
+export MSSQL_SA_PASSWORD="${MSSQL_SA_PASSWORD:-Aa1%$(openssl rand -hex 16)}"
+```
 
 ```yaml
 services:
